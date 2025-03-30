@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h3>Hii <%= user.fusername %></h3>
+    <h1>
+        farmer home page
+    </h1>
+   
+    <form method="POST" action="/farm_home/<%= user.fid %>/submitform">
+        <input type="name" name="name" placeholder="crop name" required>
+        <input type="quantity" name="quantity" placeholder="quantity" required>
+        <input type="price" name="price" placeholder="price" required>
+        <button type="submit">Add</button> 
+    </form>
+
+    <table border="1">
+        
+            <tr>
+                <th>Crop Name</th>
+                <th>Quantity</th>
+                <th>Price</th>
+            </tr>
+            <% for ( crop of crops ) {%>
+                <tr>
+                    <td><%= crop.cname %></td>
+                    <td><%= crop.quantity %></td>
+                    <td><%= crop.price %></td>
+                </tr>
+                <% } %>
+        
+    </table>
+
+
+</body>
+</html>
+

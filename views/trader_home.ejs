@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>
+        welcome back <%=user.tusername %>
+    </h1>
+    
+        <% for ( crop of crops ) {%>
+            <form method="post" action="/trader_home/<%= user.tid %>/<%=crop.cname%>">
+                <button type="submit"  ><%= crop.cname %></button>
+            </form>        
+        <% } %>
+    
+</table>
+</body>
+</html>

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="flip-card">
+        <div class="flip-card-inner">
+            
+            <div class="flip-card-front">
+                <h1>Welcome Back Traader</h1>
+                <form action="/trader_login" method="POST">
+                    <input type="email" name="email" id="email" placeholder="Email" class="input-field" required>
+                    <input type="password" name="password" id="pass" placeholder="Password" class="input-field" required>
+                    <button type="submit" class="btn">Login</button>
+                </form>
+                
+                <a class="toggle-link" onclick="flipCard()">Don't have an account? Sign Up</a>
+
+            </div>
+
+            
+            <div class="flip-card-back">
+                <h1>Sign Up</h1>
+                <form action="/trader_signup" method="POST">
+                    <input type="text" name="username" placeholder="Username" class="input-field" required>
+                    <input type="email" name="email" placeholder="Email" class="input-field" required>
+                    <input type="password" name="password" placeholder="Password" class="input-field" required>
+                    <input type="password" placeholder="Confirm Password" class="input-field" required>
+                    <button type="submit" class="btn">Sign Up</button>
+                </form>
+                <a class="toggle-link" onclick="flipCard()">Already have an account? Login</a>
+
+            </div>
+        </div>
+        <style>
+            .flip-card {
+                width: 400px;
+                height: 400px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                /* height: 70vh;  */
+                text-align: center;
+                padding-top: 100px;
+                margin: auto;
+
+            }
+
+            .flip-card-inner {
+                width: 100%;
+                height: 100%;
+                position: relative;
+                transition: transform 0.8s;
+                transform-style: preserve-3d;
+            }
+
+            .flip-card.flip .flip-card-inner {
+                transform: rotateY(180deg);
+            }
+
+            .flip-card-front{
+                width: 100%;
+                height: 100%;
+                position: absolute;
+                top: 0;
+                left: 0;
+                backface-visibility: hidden;
+                background: rgba(33, 33, 33, 0.7);
+                border-radius: 10px;
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+                color: white;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                padding: 20px;
+                box-sizing: border-box;
+            }
+
+            .flip-card-back {
+                transform: rotateY(180deg);
+                width: 400px;
+                height: 500px;
+                position: absolute;
+                top: 0;
+                left: 0;
+                backface-visibility: hidden;
+                background: rgba(33, 33, 33, 0.7);
+                border-radius: 10px;
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+                color: white;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                padding: 20px;
+                box-sizing: border-box;
+            }
+
+            h1 {
+                margin-top: 0px;
+                margin-bottom: 25px;
+            }
+
+            input {
+                width: 80%;
+                padding: 10px;
+                margin: 20px 0;
+                border: none;
+                border-radius: 5px;
+            }
+
+            .btn {
+                background: linear-gradient(45deg, #ff5733, #ffbd69);
+                color: white;
+                padding: 10px 20px;
+                border: none;
+                border-radius: 50px;
+                cursor: pointer;
+                transition: all 0.3s;
+                margin-top: 20px;
+                text-transform: uppercase;
+                font-weight: bold;
+                letter-spacing: 1px;
+            }
+
+            .btn:hover {
+                background: linear-gradient(45deg, #ffbd69, #ff5733);
+                transform: scale(1.05);
+            }
+
+            .toggle-link {
+                color: #ffbd69;
+                text-decoration: none;
+                margin-top: 10px;
+                cursor: pointer;
+                transition: color 0.3s;
+            }
+
+            .toggle-link:hover {
+                color: #ff5733;
+            }
+
+        </style>
+    </div>
+
+    <script>
+
+        function flipCard() {
+                document.querySelector('.flip-card').classList.toggle('flip');
+        }
+
+            // Move to next input on Enter key press
+            const inputs = document.querySelectorAll('.input-field');
+            inputs.forEach((input, index) => {
+                input.addEventListener('keydown', (event) => {
+                    if (event.key === 'Enter') {
+                        event.preventDefault(); // Prevent form submission
+                        const nextInput = inputs[index + 1];
+                        if (nextInput) {
+                            nextInput.focus(); // Move to the next input field
+                        }
+                    }
+                });
+            });
+    </script>
+
+
+</body>
+</html>

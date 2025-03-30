@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>
+     <%=data[0].cname %>
+    </h1>
+    <table border="1">
+        <tr>
+            <th>Crop Name</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Farmer Name</th>
+        </tr>
+        <% for (d of data) {%>
+            <tr>
+                <td><%= d.cname%></td>
+                <td><%= d.quantity%></td>
+                <td><%= d.price%></td>
+                <td><%= d.fusername%></td>
+            </tr>
+        <% } %>
+    </table>
+
+</body>
+</html>

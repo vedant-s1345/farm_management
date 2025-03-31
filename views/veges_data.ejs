@@ -12,19 +12,19 @@
     
         
         <% for (res of result) {%>
-            <h3><%= res.cropname %></h3>
+            <h3><%= res.vegesname %></h3>
                 <table border="1">
                     <tr>
-                        <th>Crop Name</th>
+                        <th>Vegetable Name</th>
                         <th>Quantity</th>
                         <th>Price</th>
                         <th>Farmer Name</th>
                     </tr>
                     
-                    <% for(cn of result_specific_crop){ %>
+                    <% for(cn of result_specific_veges){ %>
                         <tr>
-                        <% if(res.cropname==cn.cropname){ %>
-                            <td><%= cn.cropname %></td>
+                        <% if(res.vegesname==cn.vegesname){ %>
+                            <td><%= cn.vegesname %></td>
                             <td><%= cn.quantity %></td>
                             <td><%= cn.price %></td>
                             <td><%= cn.farmer %></td>

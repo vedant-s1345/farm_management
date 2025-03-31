@@ -10,9 +10,9 @@
         welcome back <%=user.tusername %>
     </h1>
     
-        <% for ( crop of crops ) {%>
-            <form method="post" action="/trader_home/<%= user.tid %>/<%=crop.cname%>">
-                <button type="submit"  ><%= crop.cname %></button>
+        <% for ( product of products ) {%>
+            <form method="post" action="/trader_home/<%= user.tid %>/<%=product.ptname%>">
+                <button type="submit"  ><%= product.ptname %></button>
             </form>        
         <% } %>
     

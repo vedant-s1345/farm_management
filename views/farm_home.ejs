@@ -10,13 +10,10 @@
     <h1>
         farmer home page
     </h1>
-   
-    <form method="POST" action="/farm_home/<%= user.fid %>/submitform">
-        <input type="name" name="name" placeholder="crop name" required>
-        <input type="quantity" name="quantity" placeholder="quantity" required>
-        <input type="price" name="price" placeholder="price" required>
-        <button type="submit">Add</button> 
-    </form>
+
+   <!-- Grains Section -->
+    <h1>Grains</h1>
+
 
     <table border="1">
         
@@ -34,7 +31,91 @@
                 <% } %>
         
     </table>
+    <form method="POST" action="/farm_home/<%= user.fid %>/submitcrop">
+        <input type="name" name="name" placeholder="crop name" required>
+        <input type="quantity" name="quantity" placeholder="quantity" required>
+        <input type="price" name="price" placeholder="price" required>
+        <button type="submit">Add</button> 
+    </form>
 
+
+    <h1>Veges</h1>
+
+
+    <table border="1">
+        
+            <tr>
+                <th>Vegetable Name</th>
+                <th>Quantity</th>
+                <th>Price</th>
+            </tr>
+            <% for ( veg of veges ) {%>
+                <tr>
+                    <td><%= veg.vname %></td>
+                    <td><%= veg.vquantity %></td>
+                    <td><%= veg.vprice %></td>
+                </tr>
+                <% } %>
+        
+    </table>
+    <form method="POST" action="/farm_home/<%= user.fid %>/submitveges">
+        <input type="name" name="name" placeholder="vegetable name" required>
+        <input type="quantity" name="quantity" placeholder="quantity" required>
+        <input type="price" name="price" placeholder="price" required>
+        <button type="submit">Add</button> 
+    </form>
+
+    <h1>Dairy</h1>
+
+
+    <table border="1">
+        
+            <tr>
+                <th>Dairy Product</th>
+                <th>Quantity</th>
+                <th>Price</th>
+            </tr>
+            <% for ( d of dairy ) {%>
+                <tr>
+                    <td><%= d.dname %></td>
+                    <td><%= d.dquantity %></td>
+                    <td><%= d.dprice %></td>
+                </tr>
+                <% } %>
+        
+    </table>
+    <form method="POST" action="/farm_home/<%= user.fid %>/submitdairy">
+        <input type="name" name="name" placeholder="dairy product" required>
+        <input type="quantity" name="quantity" placeholder="quantity" required>
+        <input type="price" name="price" placeholder="price" required>
+        <button type="submit">Add</button> 
+    </form>
+
+    <h1>Poultry</h1>
+
+
+    <table border="1">
+        
+            <tr>
+                <th>Poultry Product</th>
+                <th>Quantity</th>
+                <th>Price</th>
+            </tr>
+            <% for ( p of poultry ) {%>
+                <tr>
+                    <td><%= p.pname %></td>
+                    <td><%= p.pquantity %></td>
+                    <td><%= p.pprice %></td>
+                </tr>
+                <% } %>
+        
+    </table>
+    <form method="POST" action="/farm_home/<%= user.fid %>/submitpoultry">
+        <input type="name" name="name" placeholder="Poultry product" required>
+        <input type="quantity" name="quantity" placeholder="quantity" required>
+        <input type="price" name="price" placeholder="price" required>
+        <button type="submit">Add</button> 
+    </form>
 
 </body>
 </html>

@@ -87,15 +87,35 @@
         
         let q='select * from flogin where fid=?';
         let get_crops = `SELECT * FROM crops WHERE fid = ?`;
+        let get_veges=`select  * from veges where fid=?`;
+        let get_dairy=`select * from dairy where fid=?`;
+        let get_poultry=`select * from poultry where fid=?`;
         connect.query(q,[fid],(err,result)=>{
             if(err) throw err;
             if(result.length>0){
                 const user=result[0];
                 console.log(user);
+
                 connect.query(get_crops,[fid],(err,result_crops)=>{
                     crops = result_crops;
                     console.log(crops);
-                    res.render("farm_home",{user,crops});
+
+                    connect.query(get_veges,[fid],(err,result_veges)=>{
+                        veges = result_veges;
+                        console.log(veges);
+
+                        connect.query(get_dairy,[fid],(err,result_dairy)=>{
+                            dairy = result_dairy;
+                            console.log(dairy);
+
+                            connect.query(get_poultry,[fid],(err,result_poultry)=>{
+                                poultry = result_poultry;
+                                console.log(poultry);
+
+                                res.render("farm_home",{user,crops,veges,dairy,poultry});
+                            })
+                        })
+                    })
                 })
                 
             }
@@ -150,36 +170,95 @@
     app.get("/trader_home/:tid",(req,res)=>{
         const {tid}=req.params;
         console.log(tid);
-        connect.query('select distinct cname from crops',(err,result)=>{
+        connect.query('select * from product_type',(err,result)=>{
             if(err) throw err;
             if(result.length>0){
-                crops = result;
-                console.log(crops);
+                products = result;
+                console.log(products);
                 connect.query('select * from tlogin where tid=?',[tid],(err,result1)=>{
                     console.log(result1);
                     user=result1[0];
-                    res.render("trader_home",{user,crops});
+                    res.render("trader_home",{user,products});
                 })
             }
         })
     })
 
-    app.post("/trader_home/:tid/:cname",(req,res)=>{
-        let{cname}=req.params;
+    app.post("/trader_home/:tid/:ptname",(req,res)=>{
+        let{ptname}=req.params;
         let{tid}=req.params;
-        q='select f.fusername,c.cname,c.quantity,c.price from flogin f join crops c on f.fid=c.fid where c.cname=?';
 
-        connect.query(q,[cname],(err,result)=>{
-            if (err) throw err;
-            if(result.length>0){
-                data=result;
-                console.log(data);
-                res.render("crop_data",{data});
-            }
-        })
+        if(ptname=="crops"){
+            let q='SELECT DISTINCT a.cname as cropname FROM (select f.fusername,c.cname,c.quantity,c.price from flogin f join crops c on f.fid=c.fid) as a ';
+            let get_crop_details = `SELECT * FROM (select f.fusername as farmer,c.cname as cropname,c.quantity as quantity,c.price as price from flogin f join crops c on f.fid=c.fid)as a `;
+            connect.query(q,(err,result)=>{
+                if (err) throw err;
+                if(result.length>0){
+                    console.log(result);
+                        connect.query(get_crop_details,(err,result_specific_crop)=>{
+                            if (err) throw err;
+                            console.log(result_specific_crop);
+                            res.render("crop_data",{result,result_specific_crop})
+                        })
+                        
+                       
+                    
+                }
+            })
+        }
+
+        if(ptname=="veges"){
+            let q='SELECT DISTINCT a.vname as vegesname FROM (select f.fusername,v.vname,v.vquantity,v.vprice from flogin f join veges v on f.fid=v.fid) as a ';
+            let get_veges_details = `SELECT * FROM (select f.fusername as farmer,v.vname as vegesname,v.vquantity as quantity,v.vprice as price from flogin f join veges v on f.fid=v.fid)as a `;
+            connect.query(q,(err,result)=>{
+                if (err) throw err;
+                if(result.length>0){
+                    console.log(result);
+                        connect.query(get_veges_details,(err,result_specific_veges)=>{
+                            if (err) throw err;
+                            console.log(result_specific_veges);
+                            res.render("veges_data",{result,result_specific_veges})
+                        })
+
+                }
+            })
+        }
+        if(ptname=="dairy"){
+            let q='SELECT DISTINCT a.dname as dairy_product FROM (select f.fusername,d.dname,d.dquantity,d.dprice from flogin f join dairy d on f.fid=d.fid) as a ';
+            let get_dairy_details = `SELECT * FROM (select f.fusername as farmer,d.dname as dairy_product,d.dquantity as quantity,d.dprice as price from flogin f join dairy d on f.fid=d.fid)as a `;
+            connect.query(q,(err,result)=>{
+                if (err) throw err;
+                if(result.length>0){
+                    console.log(result);
+                        connect.query(get_dairy_details,(err,result_specific_dairy)=>{
+                            if (err) throw err;
+                            console.log(result_specific_dairy);
+                            res.render("dairy_data",{result,result_specific_dairy})
+                        })
+
+                }
+            })
+        }
+        if(ptname=="poultry"){
+            let q='SELECT DISTINCT a.pname as poultry_product FROM (select f.fusername,p.pname,p.pquantity,p.pprice from flogin f join poultry  p on f.fid=p.fid) as a ';
+            let get_poultry_details = `SELECT * FROM (select f.fusername as farmer,p.pname as poultry_product,p.pquantity as quantity,p.pprice as price from flogin f join poultry p on f.fid=p.fid)as a `;
+            connect.query(q,(err,result)=>{
+                if (err) throw err;
+                if(result.length>0){
+                    console.log(result);
+                        connect.query(get_poultry_details,(err,result_specific_poultry)=>{
+                            if (err) throw err;
+                            console.log(result_specific_poultry);
+                            res.render("poultry_data",{result,result_specific_poultry})
+                        })
+
+                }
+            })
+        }
     })
 
-    app.post("/farm_home/:fid/submitform",(req,res)=>{
+
+    app.post("/farm_home/:fid/submitcrop",(req,res)=>{
         let {fid}=req.params;
         let {name,quantity,price}=req.body;
         let q='insert into crops(cname,quantity,price,fid) values(?,?,?,?)';
@@ -188,6 +267,45 @@
                 console.error(err);
             }
             console.log("crop added successfully...");
+            res.redirect(`/farm_home/${fid}`);
+        })
+    })
+
+    app.post("/farm_home/:fid/submitveges",(req,res)=>{
+        let {fid}=req.params;
+        let {name,quantity,price}=req.body;
+        let q='insert into veges(vname,vquantity,vprice,fid) values(?,?,?,?)';
+        connect.query(q,[name,quantity,price,fid],(err,result)=>{
+            if(err){
+                console.error(err);
+            }
+            console.log("vegetable added successfully...");
+            res.redirect(`/farm_home/${fid}`);
+        })
+    })
+
+    app.post("/farm_home/:fid/submitdairy",(req,res)=>{
+        let {fid}=req.params;
+        let {name,quantity,price}=req.body;
+        let q='insert into dairy(dname,dquantity,dprice,fid) values(?,?,?,?)';
+        connect.query(q,[name,quantity,price,fid],(err,result)=>{
+            if(err){
+                console.error(err);
+            }
+            console.log("diary product added successfully...");
+            res.redirect(`/farm_home/${fid}`);
+        })
+    })
+
+    app.post("/farm_home/:fid/submitpoultry",(req,res)=>{
+        let {fid}=req.params;
+        let {name,quantity,price}=req.body;
+        let q='insert into poultry(pname,pquantity,pprice,fid) values(?,?,?,?)';
+        connect.query(q,[name,quantity,price,fid],(err,result)=>{
+            if(err){
+                console.error(err);
+            }
+            console.log("poultry product added successfully...");
             res.redirect(`/farm_home/${fid}`);
         })
     })

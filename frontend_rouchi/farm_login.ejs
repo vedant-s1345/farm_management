@@ -1,0 +1,159 @@
+<% layout('layout') -%>
+
+<div class="container mx-auto px-4 py-6">
+    <!-- Welcome Section -->
+    <div class="bg-gradient-to-r from-green-600 to-green-700 rounded-xl shadow-lg p-6 mb-8 text-white">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center">
+            <div>
+                <h1 class="text-2xl md:text-3xl font-bold">Welcome, <%= user.fusername %></h1>
+                <p class="mt-2 opacity-90">Manage your farm products and inventory</p>
+            </div>
+            <div class="mt-4 md:mt-0 flex items-center space-x-3">
+                <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm">Farmer ID: <%= user.fid %></span>
+                <a href="/logout" class="bg-white text-green-700 px-4 py-2 rounded-lg font-medium hover:bg-opacity-90 transition">Logout</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Management Tabs -->
+    <div class="mb-8">
+        <div class="flex overflow-x-auto pb-2">
+            <button onclick="showTab('grains')" class="tab-button active px-4 py-2 mr-2 rounded-t-lg bg-green-600 text-white font-medium">
+                <i class="fas fa-wheat mr-2"></i>Grains
+            </button>
+            <button onclick="showTab('vegetables')" class="tab-button px-4 py-2 mr-2 rounded-t-lg bg-gray-200 hover:bg-gray-300 font-medium">
+                <i class="fas fa-carrot mr-2"></i>Vegetables
+            </button>
+            <button onclick="showTab('dairy')" class="tab-button px-4 py-2 mr-2 rounded-t-lg bg-gray-200 hover:bg-gray-300 font-medium">
+                <i class="fas fa-cheese mr-2"></i>Dairy
+            </button>
+            <button onclick="showTab('poultry')" class="tab-button px-4 py-2 rounded-t-lg bg-gray-200 hover:bg-gray-300 font-medium">
+                <i class="fas fa-egg mr-2"></i>Poultry
+            </button>
+        </div>
+    </div>
+
+    <!-- Grains Tab Content -->
+    <div id="grains" class="tab-content active">
+        <div class="bg-white rounded-xl shadow-sm overflow-hidden mb-8">
+            <div class="px-6 py-4 bg-gray-50 border-b border-gray-200">
+                <h2 class="text-xl font-semibold text-gray-800 flex items-center">
+                    <i class="fas fa-wheat mr-2 text-yellow-600"></i> Grain Products
+                </h2>
+            </div>
+            
+            <% if (crops.length === 0) { %>
+                <div class="text-center py-8">
+                    <div class="mx-auto w-20 h-20 bg-yellow-100 rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-wheat text-yellow-600 text-2xl"></i>
+                    </div>
+                    <p class="text-gray-600">No grain products added yet</p>
+                </div>
+            <% } else { %>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Crop Name</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantity (kg)</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price (₹/kg)</th>
+                                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <% for (crop of crops) { %>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <div class="flex-shrink-0 h-10 w-10 bg-yellow-100 rounded-full flex items-center justify-center">
+                                                <i class="fas fa-wheat text-yellow-600"></i>
+                                            </div>
+                                            <div class="ml-4">
+                                                <div class="text-sm font-medium text-gray-900"><%= crop.cname %></div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"><%= crop.quantity %></td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                            ₹<%= crop.price %>
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                        <button class="text-blue-600 hover:text-blue-900 mr-3">Edit</button>
+                                        <button class="text-red-600 hover:text-red-900">Delete</button>
+                                    </td>
+                                </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            <% } %>
+            
+            <!-- Add Grain Form -->
+            <div class="px-6 py-4 bg-gray-50 border-t border-gray-200">
+                <h3 class="text-lg font-medium text-gray-800 mb-3">Add New Grain</h3>
+                <form method="POST" action="/farm_home/<%= user.fid %>/submitcrop" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div>
+                        <label for="grain-name" class="block text-sm font-medium text-gray-700 mb-1">Crop Name</label>
+                        <input type="text" id="grain-name" name="name" required 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500">
+                    </div>
+                    <div>
+                        <label for="grain-quantity" class="block text-sm font-medium text-gray-700 mb-1">Quantity (kg)</label>
+                        <input type="number" id="grain-quantity" name="quantity" required 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500">
+                    </div>
+                    <div>
+                        <label for="grain-price" class="block text-sm font-medium text-gray-700 mb-1">Price (₹/kg)</label>
+                        <input type="number" id="grain-price" name="price" required 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500">
+                    </div>
+                    <div class="flex items-end">
+                        <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md shadow-sm flex items-center justify-center">
+                            <i class="fas fa-plus mr-2"></i> Add Grain
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Vegetables Tab Content -->
+    <div id="vegetables" class="tab-content hidden">
+        <!-- Similar structure as grains tab -->
+    </div>
+
+    <!-- Dairy Tab Content -->
+    <div id="dairy" class="tab-content hidden">
+        <!-- Similar structure as grains tab -->
+    </div>
+
+    <!-- Poultry Tab Content -->
+    <div id="poultry" class="tab-content hidden">
+        <!-- Similar structure as grains tab -->
+    </div>
+</div>
+
+<script>
+    function showTab(tabName) {
+        // Hide all tab contents
+        document.querySelectorAll('.tab-content').forEach(tab => {
+            tab.classList.remove('active');
+            tab.classList.add('hidden');
+        });
+        
+        // Show selected tab content
+        document.getElementById(tabName).classList.remove('hidden');
+        document.getElementById(tabName).classList.add('active');
+        
+        // Update tab buttons
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.classList.remove('bg-green-600', 'text-white');
+            button.classList.add('bg-gray-200', 'hover:bg-gray-300');
+        });
+        
+        event.currentTarget.classList.remove('bg-gray-200', 'hover:bg-gray-300');
+        event.currentTarget.classList.add('bg-green-600', 'text-white');
+    }
+</script>
